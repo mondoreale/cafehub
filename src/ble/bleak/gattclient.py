@@ -93,13 +93,16 @@ class GATTClient(GATTClientInterface):
             # We've been told to cancel, so do nothing
             return GATTCState.CANCELLED
 
+        connected = self.is_connected()
+
         try:
             # Next line of code is a hack to circumvent a BLEAK bug. See https://github.com/hbldh/bleak/issues/376
             # Clear the list of services associated with a peripheral, to stop intermittent exceptions
             # that complain that the list already has entries.
             self.BleakClient.services = BleakGATTServiceCollection()
 
-            connected = await self.BleakClient.connect()
+            if not connected:
+                connected = await self.BleakClient.connect()
         except BleakError as be:
             Logger.debug("BLE: Exception while attempting to connect")
             raise BLEConnectionError(getattr(be, 'message', repr(be)))
