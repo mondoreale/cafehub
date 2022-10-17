@@ -293,4 +293,4 @@ class GATTClient(GATTClientInterface):
         self.QOpExecutor.Manager.addFIFOOp(op)
 
     def is_connected(self) -> bool:
-        return self.BleakClient.is_connected()
+        return self.BleakClient.is_connected
